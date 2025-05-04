@@ -1,0 +1,27 @@
+{
+    "output_prefix": "competence_analysis_default",
+    
+    "run_standard_analysis": true,
+    "run_excitable_search": true,
+    "run_hill_analysis": true,
+    "run_suel_search": true,
+    "run_stochastic_analysis": true,
+    "run_amplification_analysis": true,
+    
+    "standard_t_max": 150,
+    
+    "excitable_n_samples": 500000,
+    
+    "hill_grid_size": 50,
+    "hill_extended_search": true,
+    
+    "suel_n_points": 100,
+    
+    "stochastic_n_simulations": 50,
+    "stochastic_t_max": 500,
+    "stochastic_amplification": 10,
+    
+    "amplification_factors": [1, 2, 3, 5, 7, 10],
+    "amplification_n_simulations": 100,
+    "amplification_t_max": 500
+}
