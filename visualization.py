@@ -596,6 +596,75 @@ def plot_duration_distribution(all_durations, all_rise_times, output_dir):
     plt.legend()
     plt.savefig(os.path.join(output_dir, 'combined_rise_vs_duration.png'))
     plt.close()
+    
+    # 4. Boxplot comparisons
+    plt.figure(figsize=(14, 8))
+    
+    # Durations boxplot
+    plt.subplot(1, 2, 1)
+    duration_data = [all_durations[param] for param in all_durations.keys()]
+    param_labels = list(all_durations.keys())
+    plt.boxplot(duration_data, labels=param_labels)
+    plt.xticks(rotation=45, ha='right')
+    plt.ylabel('Duration')
+    plt.title('Competence Durations by Parameter Set')
+    plt.grid(True, alpha=0.3)
+    
+    # Rise times boxplot
+    plt.subplot(1, 2, 2)
+    rise_data = [all_rise_times[param] for param in all_rise_times.keys()]
+    plt.boxplot(rise_data, labels=param_labels)
+    plt.xticks(rotation=45, ha='right')
+    plt.ylabel('Rise Time')
+    plt.title('Competence Rise Times by Parameter Set')
+    plt.grid(True, alpha=0.3)
+    
+    plt.tight_layout()
+    plt.savefig(os.path.join(output_dir, 'boxplot_comparison.png'))
+    plt.close()
+    
+    # 5. Kernel Density Estimation of Duration Distributions
+    plt.figure(figsize=(14, 8))
+    
+    # Use KDE to get a smooth estimate of the probability distribution
+    from scipy.stats import gaussian_kde
+    
+    x_range = np.linspace(0, 50, 200)
+    
+    for i, (param_name, durations) in enumerate(all_durations.items()):
+        if len(durations) > 5:  # Need enough points for KDE
+            # Use Gaussian KDE for smooth density estimation
+            kde = gaussian_kde(durations)
+            plt.plot(x_range, kde(x_range), '-', linewidth=2, color=colors[i], 
+                   label=f'{param_name} (n={len(durations)})')
+    
+    plt.xlabel('Competence Duration')
+    plt.ylabel('Probability Density')
+    plt.title('Kernel Density Estimation of Competence Duration Distributions')
+    plt.grid(True, alpha=0.3)
+    plt.legend()
+    plt.savefig(os.path.join(output_dir, 'duration_kde.png'))
+    plt.close()
+    
+    # 6. KDE for Rise Times
+    plt.figure(figsize=(14, 8))
+    
+    x_range_rise = np.linspace(0, 20, 200)
+    
+    for i, (param_name, rise_times) in enumerate(all_rise_times.items()):
+        if len(rise_times) > 5:  # Need enough points for KDE
+            # Use Gaussian KDE for smooth density estimation
+            kde = gaussian_kde(rise_times)
+            plt.plot(x_range_rise, kde(x_range_rise), '-', linewidth=2, color=colors[i], 
+                   label=f'{param_name} (n={len(rise_times)})')
+    
+    plt.xlabel('Rise Time')
+    plt.ylabel('Probability Density')
+    plt.title('Kernel Density Estimation of Rise Time Distributions')
+    plt.grid(True, alpha=0.3)
+    plt.legend()
+    plt.savefig(os.path.join(output_dir, 'risetime_kde.png'))
+    plt.close()
 
 def plot_parameter_correlations(correlation_df, output_dir):
     """

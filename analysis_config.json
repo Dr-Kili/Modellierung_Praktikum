@@ -21,7 +21,7 @@
     "stochastic_t_max": 500,
     "stochastic_amplification": 10,
     
-    "amplification_factors": [1, 2, 3, 5, 7, 10],
+    "amplification_factors": [1, 3, 5, 7, 10],
     "amplification_n_simulations": 100,
     "amplification_t_max": 500
 }

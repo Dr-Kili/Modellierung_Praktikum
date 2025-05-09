@@ -1,6 +1,7 @@
 # B. subtilis Competence Circuit Analysis
+Derya Kilicarslan
 
-This repository contains Python scripts for analyzing the competence circuit dynamics in B. subtilis bacteria. The code has been refactored into modular components for improved organization and reusability.
+This repository contains Python scripts for analyzing the competence circuit dynamics in B. subtilis bacteria. 
 
 ## Project Structure
 
