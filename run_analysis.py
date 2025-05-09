@@ -35,6 +35,11 @@ DEFAULT_PARAMS = {
     "run_suel_search": True,
     "run_stochastic_analysis": True,
     "run_amplification_analysis": True,
+
+     # Initial conditions for simulations
+    "initial_comk": 0.01,
+    "initial_coms": 0.2,
+    "initial_coms_boost": False,  # Whether to apply a 10x boost to initial ComS concentration
     
     # Standard parameter analysis
     "standard_t_max": 100,
@@ -76,8 +81,13 @@ def analyze_standard_parameters(results_dir, params):
     
     print("\n=== ANALYZING STANDARD PARAMETERS ===")
     
+    # Get initial conditions from params
+    initial_comk = params.get("initial_comk", 0.01)
+    initial_coms = params.get("initial_coms", 0.2)
+    
     # Print and save parameter details
     print_and_save_parameters(std_params, results_dir, "Standard Parameters")
+    print(f"Using initial conditions: ComK = {initial_comk}, ComS = {initial_coms}")
     
     # K and S ranges for analysis
     K_range = np.linspace(0, 1, 200)
@@ -115,9 +125,7 @@ def analyze_standard_parameters(results_dir, params):
         ]
         
         for init in initial_conditions:
-            t, K, S = simulate_system(comp_model.model_odes, std_params, 
-                                    initial_conditions=init, 
-                                    t_max=params["standard_t_max"])
+            t, K, S = simulate_system(comp_model.model_odes, std_params, initial_conditions=init, t_max=params["standard_t_max"])
             trajectories.append((K, S))
         
         # Create phase diagram
@@ -135,7 +143,7 @@ def analyze_standard_parameters(results_dir, params):
     
     # Simulate time series with standard parameters
     t, K, S = simulate_system(comp_model.model_odes, std_params, 
-                            initial_conditions=[0.01, 0.2], 
+                            [0.01, 0.2], 
                             t_max=params["standard_t_max"])
     fig_time, ax_time, comp_periods = plot_time_series(t, K, S, 
                                            title="Time Series of Standard Parameters")
@@ -253,6 +261,16 @@ def run_stochastic_analysis(results_dir, params, excitable_configs=None):
         dict: Results of stochastic simulations
     """
     print("\n=== RUNNING STOCHASTIC ANALYSIS ===")
+
+    # Get initial conditions from params
+    initial_comk = params.get("initial_comk", 0.01)
+    initial_coms = params.get("initial_coms", 0.2)
+    initial_coms_boost = params.get("initial_coms_boost", False)
+    
+    print(f"Using initial conditions: ComK = {initial_comk}, ComS = {initial_coms}")
+    if initial_coms_boost:
+        print(f"Applying 10x boost to initial ComS concentration")
+    
     
     # Create directory for stochastic analysis
     stochastic_dir = os.path.join(results_dir, 'stochastic_analysis')
@@ -329,7 +347,9 @@ def run_stochastic_analysis(results_dir, params, excitable_configs=None):
         dt=0.01,              # Time step
         threshold=0.5,        # Competence threshold
         param_names=param_names,
-        amplification_factor=params["stochastic_amplification"]
+        amplification_factor=params["stochastic_amplification"],
+        initial_conditions=[initial_comk, initial_coms],
+        initial_coms_boost=initial_coms_boost
     )
     
     # Analyze distribution of competence durations
@@ -353,6 +373,15 @@ def run_amplification_analysis(results_dir, params):
     """
     print("\n=== RUNNING NOISE AMPLIFICATION FACTOR ANALYSIS ===")
     
+    # Get initial conditions from params
+    initial_comk = params.get("initial_comk", 0.01)
+    initial_coms = params.get("initial_coms", 0.2)
+    initial_coms_boost = params.get("initial_coms_boost", False)
+    
+    print(f"Using initial conditions: ComK = {initial_comk}, ComS = {initial_coms}")
+    if initial_coms_boost:
+        print(f"Applying 10x boost to initial ComS concentration")
+    
     # Create directory for amplification analysis
     amp_dir = os.path.join(results_dir, 'amplification_analysis')
     os.makedirs(amp_dir, exist_ok=True)
@@ -367,7 +396,9 @@ def run_amplification_analysis(results_dir, params):
         amp_dir,
         amplification_factors=params["amplification_factors"],
         n_simulations=params["amplification_n_simulations"],
-        t_max=params["amplification_t_max"]
+        t_max=params["amplification_t_max"],
+        initial_conditions=[initial_comk, initial_coms],
+        initial_coms_boost=initial_coms_boost
     )
     
     return amp_results
@@ -760,11 +791,19 @@ def parse_arguments():
     
     # Parameter override arguments
     parser.add_argument('--output-prefix', type=str, help='Prefix for output directory')
+    
+    # Initial condition arguments
+    parser.add_argument('--initial-comk', type=float, help='Initial concentration of ComK')
+    parser.add_argument('--initial-coms', type=float, help='Initial concentration of ComS')
+    parser.add_argument('--coms-boost', action='store_true', help='Apply 10x boost to initial ComS concentration')
+    
+    # Analysis-specific parameters
     parser.add_argument('--excitable-samples', type=int, help='Number of samples for excitable search')
     parser.add_argument('--hill-grid-size', type=int, help='Grid size for Hill coefficient search')
     parser.add_argument('--suel-points', type=int, help='Number of points for Suel search')
     parser.add_argument('--stochastic-sims', type=int, help='Number of stochastic simulations')
     parser.add_argument('--stochastic-time', type=float, help='Maximum time for stochastic simulations')
+    parser.add_argument('--stochastic-amp', type=float, help='Amplification factor for stochastic simulations')
     parser.add_argument('--amp-sims', type=int, help='Number of amplification simulations')
     parser.add_argument('--amp-time', type=float, help='Maximum time for amplification simulations')
     
@@ -816,6 +855,16 @@ def update_params_from_args(params, args):
     # Update other parameters if specified
     if args.output_prefix:
         params["output_prefix"] = args.output_prefix
+    
+    # Initial condition parameters
+    if args.initial_comk:
+        params["initial_comk"] = args.initial_comk
+    if args.initial_coms:
+        params["initial_coms"] = args.initial_coms
+    if args.coms_boost:
+        params["initial_coms_boost"] = True
+    
+    # Analysis-specific parameters
     if args.excitable_samples:
         params["excitable_n_samples"] = args.excitable_samples
     if args.hill_grid_size:
@@ -826,6 +875,8 @@ def update_params_from_args(params, args):
         params["stochastic_n_simulations"] = args.stochastic_sims
     if args.stochastic_time:
         params["stochastic_t_max"] = args.stochastic_time
+    if args.stochastic_amp:
+        params["stochastic_amplification"] = args.stochastic_amp
     if args.amp_sims:
         params["amplification_n_simulations"] = args.amp_sims
     if args.amp_time:

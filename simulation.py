@@ -102,7 +102,8 @@ def simulate_system_with_noise(model_odes, params, noise_params,
 
 def analyze_stochastic_competence(model_odes, params_list, noise_params, results_dir, 
                                  n_simulations=20, t_max=1000, dt=0.01, threshold=0.5,
-                                 param_names=None, amplification_factor=10):
+                                 param_names=None, amplification_factor=10,
+                                 initial_conditions=[0.01, 0.2], initial_coms_boost=False):
     """
     Analyzes competence dynamics with stochastic noise for multiple parameter sets.
     Calculates both competence duration and rise time statistics.
@@ -117,7 +118,9 @@ def analyze_stochastic_competence(model_odes, params_list, noise_params, results
         dt: Time step
         threshold: Competence threshold
         param_names: Optional list of names for the parameter sets
-        amplification_factor: Factor to amplify noise effect
+        amplification_factor: Factor to amplify noise
+        initial_conditions: Initial state [K, S]
+        initial_coms_boost: Whether to apply a 10x boost to initial ComS
         
     Returns:
         dict: Statistics of competence events for each parameter set
@@ -142,6 +145,9 @@ def analyze_stochastic_competence(model_odes, params_list, noise_params, results
         print(f"Analyzing {param_name} ({idx+1}/{len(params_list)})")
         print_parameter_details(params, param_name, idx+1)
         
+        if initial_coms_boost:
+            print(f"  Applying 10x boost to initial ComS concentration")
+        
         # Create subdirectory for this parameter set
         param_dir = os.path.join(stochastic_dir, param_id)
         os.makedirs(param_dir, exist_ok=True)
@@ -159,7 +165,8 @@ def analyze_stochastic_competence(model_odes, params_list, noise_params, results
             t, K, S = simulate_system_with_noise(
                 model_odes, params, noise_params,
                 amplification_factor=amplification_factor,
-                initial_conditions=[0.01, 0.2], 
+                initial_comS_boost=initial_coms_boost,
+                initial_conditions=initial_conditions, 
                 t_max=t_max, dt=dt
             )
             
@@ -466,7 +473,9 @@ def save_summary_statistics(results, output_dir):
 
 def analyze_amplification_factors(model_odes, params, results_dir, 
                                amplification_factors=[1, 3, 5, 7, 10], 
-                               n_simulations=50, t_max=500):
+                               n_simulations=50, t_max=500,
+                               initial_conditions=[0.01, 0.2],
+                               initial_coms_boost=False):
     """
     Analyzes the effect of different noise amplification factors on competence dynamics.
     
@@ -477,6 +486,8 @@ def analyze_amplification_factors(model_odes, params, results_dir,
         amplification_factors: List of amplification factors to test
         n_simulations: Number of simulations per amplification factor
         t_max: Maximum simulation time
+        initial_conditions: Initial state [K, S]
+        initial_coms_boost: Whether to apply a 10x boost to initial ComS
         
     Returns:
         dict: Results for each amplification factor
@@ -525,12 +536,12 @@ def analyze_amplification_factors(model_odes, params, results_dir,
             if (sim + 1) % 10 == 0:
                 print(f"  Simulation {sim + 1}/{n_simulations}")
                 
-            # Run simulation with noise - no initial ComS boost
+            # Run simulation with noise - with optional initial ComS boost
             t, K, S = simulate_system_with_noise(
                 model_odes, params, noise_params,
                 amplification_factor=amp_factor,
-                initial_comS_boost=False, 
-                initial_conditions=[0.01, 0.2], 
+                initial_comS_boost=initial_coms_boost, 
+                initial_conditions=initial_conditions, 
                 t_max=t_max, dt=dt
             )
             

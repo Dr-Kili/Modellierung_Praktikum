@@ -1,5 +1,5 @@
 {
-    "output_prefix": "competence_analysis_default",
+    "output_prefix": "competence_analysis_test",
     
     "run_standard_analysis": true,
     "run_excitable_search": true,
@@ -7,10 +7,14 @@
     "run_suel_search": true,
     "run_stochastic_analysis": true,
     "run_amplification_analysis": true,
+
+    "initial_comk": 0.01,
+    "initial_coms": 0.2,
+    "initial_coms_boost": false,
     
     "standard_t_max": 150,
     
-    "excitable_n_samples": 500000,
+    "excitable_n_samples": 100,
     
     "hill_grid_size": 50,
     "hill_extended_search": true,

@@ -766,8 +766,8 @@ def visualize_search_results(excitable_configs, bs_range, bk_range, results_dir)
             plt.savefig(os.path.join(example_dir, f'phase_diagram_example_{i+1}.png'), dpi=300)
             plt.close()
             
-            # Simulate time series
-            t, K, S = simulate_system(plot_time_series.__globals__['model_odes'], params, initial_conditions=[0.01, 0.5], t_max=200)
+            # Simulate time series          
+            t, K, S = simulate_system(params, initial_conditions=[0.01, 0.5], t_max=200)
             fig, ax, comp_periods = plot_time_series(
                 t, K, S, threshold=0.5,
                 title=f"Time Series for bs={bs:.4f}, bk={bk:.4f}"

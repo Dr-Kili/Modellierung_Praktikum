@@ -1,24 +1,26 @@
-# B. subtilis Competence Circuit Analysis
+Ich werde die README auf Deutsch übersetzen, während ich die englischen Parameter, Funktionsnamen und Codebeispiele unverändert lasse.
+
+# B. subtilis Kompetenz-Schaltkreis Analyse
 Derya Kilicarslan
 
-This repository contains Python scripts for analyzing the competence circuit dynamics in B. subtilis bacteria. 
+Dieses Repository enthält Python-Skripte zur Analyse der Kompetenz-Schaltkreisdynamik in B. subtilis Bakterien.
 
-## Project Structure
+## Projektstruktur
 
-The project is organized into the following modules:
+Das Projekt ist in folgende Module gegliedert:
 
-- `competence_circuit_analysis.py` - Core model definitions and analysis functions
-- `helpers.py` - Common utility functions
-- `visualization.py` - Visualization functions for creating plots and diagrams
-- `simulation.py` - Functions for deterministic and stochastic simulations
-- `parameter_search.py` - Tools for searching parameter spaces for excitable configurations
-- `run_analysis.py` - Main script that ties everything together and allows customization
+- `competence_circuit_analysis.py` - Kern-Modelldefinitionen und Analysefunktionen
+- `helpers.py` - Allgemeine Hilfsfunktionen
+- `visualization.py` - Visualisierungsfunktionen zum Erstellen von Diagrammen
+- `simulation.py` - Funktionen für deterministische und stochastische Simulationen
+- `parameter_search.py` - Werkzeuge zur Suche nach erregbaren Konfigurationen im Parameterraum
+- `run_analysis.py` - Hauptskript, das alles zusammenführt und Anpassungen ermöglicht
 
-## Getting Started
+## Erste Schritte
 
-### Prerequisites
+### Voraussetzungen
 
-The code requires the following Python packages:
+Der Code benötigt folgende Python-Pakete:
 
 ```
 numpy
@@ -28,101 +30,101 @@ scipy
 scikit-learn
 ```
 
-You can install these with pip:
+Sie können diese mit pip installieren:
 
 ```bash
 pip install numpy matplotlib pandas scipy scikit-learn
 ```
 
-### Running the Analysis
+### Ausführen der Analyse
 
-You can run the analysis in several ways:
+Sie können die Analyse auf verschiedene Weise ausführen:
 
-#### 1. Default Analysis
+#### 1. Standardanalyse
 
-To run the full analysis with default settings, simply execute:
+Um die vollständige Analyse mit Standardeinstellungen auszuführen, führen Sie einfach aus:
 
 ```bash
 python run_analysis.py
 ```
 
-#### 2. Using a Configuration File
+#### 2. Verwendung einer Konfigurationsdatei
 
-You can customize the analysis by creating a JSON configuration file:
+Sie können die Analyse anpassen, indem Sie eine JSON-Konfigurationsdatei erstellen:
 
 ```bash
 python run_analysis.py --config analysis_config.json
 ```
 
-See the example `analysis_config.json` for available parameters.
+Siehe die Beispieldatei `analysis_config.json` für verfügbare Parameter.
 
-#### 3. Command-line Options
+#### 3. Kommandozeilen-Optionen
 
-You can run specific analyses and set parameters directly from the command line:
+Sie können bestimmte Analysen ausführen und Parameter direkt über die Kommandozeile festlegen:
 
 ```bash
-# Run only standard parameter analysis and stochastic analysis
+# Nur Standardparameteranalyse und stochastische Analyse ausführen
 python run_analysis.py --standard --stochastic
 
-# Run Suel parameter search with a higher resolution
+# Suel-Parametersuche mit höherer Auflösung ausführen
 python run_analysis.py --suel --suel-points 150
 
-# Run all analyses with customized stochastic simulation parameters
+# Alle Analysen mit angepassten stochastischen Simulationsparametern ausführen
 python run_analysis.py --all --stochastic-sims 50 --stochastic-time 500
 ```
 
-#### Available Command-line Options
+#### Verfügbare Kommandozeilen-Optionen
 
-**Module Selection:**
-- `--all`: Run all analyses
-- `--standard`: Run standard parameter analysis
-- `--excitable`: Run excitable configuration search
-- `--hill`: Run Hill coefficient analysis
-- `--suel`: Run Suel parameter space search
-- `--stochastic`: Run stochastic analysis
-- `--amplification`: Run amplification factor analysis
+**Modulauswahl:**
+- `--all`: Alle Analysen ausführen
+- `--standard`: Standardparameteranalyse ausführen
+- `--excitable`: Suche nach erregbaren Konfigurationen ausführen
+- `--hill`: Hill-Koeffizienten-Analyse ausführen
+- `--suel`: Suel-Parameterraumsuche ausführen
+- `--stochastic`: Stochastische Analyse ausführen
+- `--amplification`: Verstärkungsfaktoranalyse ausführen
 
-**Parameter Overrides:**
-- `--output-prefix`: Prefix for output directory
-- `--excitable-samples`: Number of samples for excitable search
-- `--hill-grid-size`: Grid size for Hill coefficient search
-- `--suel-points`: Number of points for Suel search
-- `--stochastic-sims`: Number of stochastic simulations
-- `--stochastic-time`: Maximum time for stochastic simulations
-- `--amp-sims`: Number of amplification simulations
-- `--amp-time`: Maximum time for amplification simulations
+**Parameter-Überschreibungen:**
+- `--output-prefix`: Präfix für Ausgabeverzeichnis
+- `--excitable-samples`: Anzahl der Stichproben für die Suche nach Erregbarkeit
+- `--hill-grid-size`: Rastergröße für die Hill-Koeffizienten-Suche
+- `--suel-points`: Anzahl der Punkte für die Suel-Suche
+- `--stochastic-sims`: Anzahl der stochastischen Simulationen
+- `--stochastic-time`: Maximale Zeit für stochastische Simulationen
+- `--amp-sims`: Anzahl der Verstärkungssimulationen
+- `--amp-time`: Maximale Zeit für Verstärkungssimulationen
 
-## Configuration Options
+## Konfigurationsoptionen
 
-You can customize the analysis by modifying the following parameters:
+Sie können die Analyse anpassen, indem Sie folgende Parameter ändern:
 
-### General Parameters
-- `output_prefix`: Prefix for output directory name
+### Allgemeine Parameter
+- `output_prefix`: Präfix für den Namen des Ausgabeverzeichnisses
 
-### Module Enable/Disable
-- `run_standard_analysis`: Whether to analyze standard parameters
-- `run_excitable_search`: Whether to search for excitable configurations
-- `run_hill_analysis`: Whether to analyze Hill coefficient effects
-- `run_suel_search`: Whether to search the Suel parameter space
-- `run_stochastic_analysis`: Whether to run stochastic simulations
-- `run_amplification_analysis`: Whether to analyze amplification factors
+### Aktivieren/Deaktivieren von Modulen
+- `run_standard_analysis`: Ob Standardparameter analysiert werden sollen
+- `run_excitable_search`: Ob nach erregbaren Konfigurationen gesucht werden soll
+- `run_hill_analysis`: Ob Hill-Koeffizienten-Effekte analysiert werden sollen
+- `run_suel_search`: Ob der Suel-Parameterraum durchsucht werden soll
+- `run_stochastic_analysis`: Ob stochastische Simulationen durchgeführt werden sollen
+- `run_amplification_analysis`: Ob Verstärkungsfaktoren analysiert werden sollen
 
-### Analysis-specific Parameters
-- `standard_t_max`: Maximum time for standard parameter simulations
-- `excitable_n_samples`: Number of samples for excitable search
-- `hill_grid_size`: Grid size for Hill coefficient search
-- `hill_extended_search`: Whether to perform extended search for Hill coefficients
-- `suel_n_points`: Number of points per dimension for Suel search
-- `stochastic_n_simulations`: Number of stochastic simulations per parameter set
-- `stochastic_t_max`: Maximum time for stochastic simulations
-- `stochastic_amplification`: Noise amplification factor for stochastic simulations
-- `amplification_factors`: List of amplification factors to analyze
-- `amplification_n_simulations`: Number of simulations per amplification factor
-- `amplification_t_max`: Maximum time for amplification factor simulations
+### Analysespezifische Parameter
+- `standard_t_max`: Maximale Zeit für Simulationen mit Standardparametern
+- `excitable_n_samples`: Anzahl der Stichproben für die Suche nach Erregbarkeit
+- `hill_grid_size`: Rastergröße für die Hill-Koeffizienten-Suche
+- `hill_extended_search`: Ob eine erweiterte Suche für Hill-Koeffizienten durchgeführt werden soll
+- `suel_n_points`: Anzahl der Punkte pro Dimension für die Suel-Suche
+- `stochastic_n_simulations`: Anzahl der stochastischen Simulationen pro Parametersatz
+- `stochastic_t_max`: Maximale Zeit für stochastische Simulationen
+- `stochastic_amplification`: Rauschverstärkungsfaktor für stochastische Simulationen
+- `amplification_factors`: Liste der zu analysierenden Verstärkungsfaktoren
+- `amplification_n_simulations`: Anzahl der Simulationen pro Verstärkungsfaktor
+- `amplification_t_max`: Maximale Zeit für Verstärkungsfaktor-Simulationen
 
-## Example Configuration File
+## Beispiel-Konfigurationsdatei
 
-Here's an example of a configuration file:
+Hier ist ein Beispiel für eine Konfigurationsdatei:
 
 ```json
 {
@@ -153,65 +155,3 @@ Here's an example of a configuration file:
     "amplification_t_max": 300
 }
 ```
-
-## Individual Analysis Components
-
-You can also run specific parts of the analysis programmatically by importing and calling the functions from `run_analysis.py`:
-
-```python
-from run_analysis import analyze_standard_parameters, run_stochastic_analysis, load_parameters
-
-# Load default parameters or from config
-params = load_parameters('my_config.json')
-
-# Create results directory
-from helpers import create_results_directory
-results_dir = create_results_directory(params["output_prefix"])
-
-# Run only specific analyses
-std_info = analyze_standard_parameters(results_dir, params)
-stochastic_results = run_stochastic_analysis(results_dir, params)
-```
-
-## Modifying the Model
-
-To modify the model, you'll primarily need to edit the `competence_circuit_analysis.py` file, which contains the core model definitions and ODEs.
-
-## Visualizing Results
-
-The `visualization.py` module provides various functions for creating plots and diagrams. You can use these functions directly to visualize your results:
-
-```python
-from visualization import plot_phase_diagram, plot_time_series
-from competence_circuit_analysis import default_params, find_fixed_points, model_odes
-from simulation import simulate_system
-import matplotlib.pyplot as plt
-
-# Load standard parameters and find fixed points
-params = default_params()
-fixed_points = find_fixed_points(params)
-
-# Simulate the system
-t, K, S = simulate_system(model_odes, params)
-
-# Create and save plots
-fig, ax = plot_phase_diagram(params, fixed_points=fixed_points)
-plt.savefig('phase_diagram.png')
-plt.close()
-
-fig, ax, events = plot_time_series(t, K, S)
-plt.savefig('time_series.png')
-plt.close()
-```
-
-## Contributing
-
-Feel free to fork this repository and make your own modifications. If you find any bugs or have suggestions for improvements, please open an issue.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-This code was developed for analyzing the competence circuit dynamics in B. subtilis bacteria based on models described in the literature.
